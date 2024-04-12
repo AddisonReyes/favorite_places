@@ -1,17 +1,10 @@
-import 'package:favorite_places/provider/places_provider.dart';
 import 'package:favorite_places/screens/add_new_place.dart';
-import 'package:favorite_places/screens/place_details.dart';
+import 'package:favorite_places/widgets/places_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class YourPlaces extends ConsumerStatefulWidget {
+class YourPlaces extends StatelessWidget {
   const YourPlaces({super.key});
 
-  @override
-  ConsumerState<YourPlaces> createState() => _YourPlacesState();
-}
-
-class _YourPlacesState extends ConsumerState<YourPlaces> {
   void _addPlace(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -24,39 +17,6 @@ class _YourPlacesState extends ConsumerState<YourPlaces> {
 
   @override
   Widget build(BuildContext context) {
-    final yourPlacesList = ref.watch(yourPlacesProvider);
-    Widget content = Center(
-      child: Text(
-        'No places added yet.',
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-      ),
-    );
-
-    if (yourPlacesList.isNotEmpty) {
-      content = ListView.builder(
-        itemCount: yourPlacesList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              yourPlacesList[index].title,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PlaceDetails(yourPlacesList[index]),
-                ),
-              );
-            },
-          );
-        },
-      );
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -74,6 +34,9 @@ class _YourPlacesState extends ConsumerState<YourPlaces> {
             ),
           ],
         ),
-        body: content);
+        body: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: PlacesList(),
+        ));
   }
 }
